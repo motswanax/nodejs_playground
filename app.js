@@ -1,13 +1,21 @@
 const express = require("express");
 
 const app = express();
+const fs = require("fs");
 
 app.get("/", (req, res) => {
-  res.send("Hi from the server.");
+  // Reading file.
+  fs.readFile("./data.txt", "utf-8", (err, data) => {
+    if (err) res.send("There was an error in accessing the file.");
+    res.send(data);
+  });
 });
 
-app.get("/cars", (req, res) => {
-  res.send("This is for cars.");
+app.get("/write", (req, res) => {
+  fs.appendFile("./data.txt", "\nCherry", (err) => {
+    if (err) res.send("Error in writing to file.");
+    res.send("Data written successfully.");
+  });
 });
 
 app.listen(8000, () => {
